@@ -7,6 +7,11 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 RUN apt-get -y upgrade
 
+# Install KDE Marble required and optional dependencies.
+RUN apt-get install -y build-essential
+RUN apt-get install -y qtcreator
+RUN apt-get install -y qt5-default
+
 # Download source code for KDE Marble, and build the environment from source.
 
 # Download 'north-america-latest.osm.pbf'. Note that this step is expensive and
