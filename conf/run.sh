@@ -4,8 +4,8 @@ DOCKER=$(which docker)
 GIT=$(which git)
 
 GIT_REPO_ROOT=$(git rev-parse --show-toplevel)
-DOCKER_IMAGE_NAME='dummy:latest'
-DOCKER_CONTAINER_NAME='dummy'
+DOCKER_IMAGE_NAME='marble:latest'
+DOCKER_CONTAINER_NAME='marble'
 
 $DOCKER build $GIT_REPO_ROOT/conf \
     --tag $DOCKER_IMAGE_NAME
