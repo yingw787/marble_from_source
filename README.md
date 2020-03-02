@@ -16,3 +16,16 @@ ability to take in OpenStreetMap `*.osm.pbf` dumps. However, the tool to convert
 from source. After running into some issues building it locally, I decided to
 Dockerize the process using my [handy dandy dev
 workflow](https://bytes.yingw787.com/posts/2020/02/27/docker_as_vagrant/).
+
+## Notes
+
+-   https://github.com has a file size limit of 2GB, with a repository limit of
+    100GB. `north-america-latest.osm.pbf`, the weekly data dump of North
+    American OpenStreetMap data provided via mirror, is around 9GB. There are no
+    data chunking tools available either via OpenStreetMap, or via `git-lfs`,
+    that I have seen. Therefore, I'm adding Docker `RUN` commands in lieu of
+    checking in a data dump into version control. I'm too cheap in order to sync
+    a blob to S3 and pay the $2 / mo. in hosting costs. I'll rely instead on the
+    Docker build cache to save a copy of the blob, with the container / image
+    stored on my computer. It should be easy enough to fetch the blob after
+    scouring my filesystem with `ncdu`.
