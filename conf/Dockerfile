@@ -1,22 +1,12 @@
-FROM ubuntu:18.04
+# Build stage
 
-# Configure process-wide environment variables.
-# Eliminate interactivity warnings from `apt` and other Debian-based tooling.
-ARG DEBIAN_FRONTEND=noninteractive
+FROM alpine:3.11.5 AS build
 
-RUN apt-get -y update
-RUN apt-get -y upgrade
+LABEL application=marble
 
-# Install KDE Marble required and optional dependencies.
-RUN apt-get install -y build-essential
-RUN apt-get install -y qtcreator
-RUN apt-get install -y qt5-default
+# Release stage
+FROM alpine:3.11.5
 
-# Download source code for KDE Marble, and build the environment from source.
-
-# Download 'north-america-latest.osm.pbf'. Note that this step is expensive and
-# should be cached.
-
-# Convert '*.osm.pbf' into vector tiles via `marble-vectorosm-tilecreator`.
+LABEL application=marble
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
