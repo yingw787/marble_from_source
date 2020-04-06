@@ -10,17 +10,10 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get -y update
 RUN apt-get -y upgrade
 
-RUN apt-get install -y cmake
-RUN apt-get install -y gcc
-RUN apt-get install -y g++
+RUN apt-get install -y build-essential
+RUN apt-get install -y qtcreator
+RUN apt-get install -y qt5-default
 RUN apt-get install -y git
-RUN apt-get install -y make
-RUN apt-get install -y qt5-qtquickcontrols2-dev
-RUN apt-get install -y qt5-qtserialport-dev
-RUN apt-get install -y qt5-qtsvg-dev
-RUN apt-get install -y qt5-qttools-dev
-RUN apt-get install -y qt5-qtwebkit-dev
-RUN apt-get install -y gpsd-dev
 
 RUN git clone \
     -b Applications/19.04 \
