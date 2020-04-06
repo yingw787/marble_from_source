@@ -21,4 +21,13 @@ $DOCKER run \
     --name $DOCKER_CONTAINER_NAME \
     --network=host \
     --volume=$(pwd):/app \
+    # Map X11 ports and map display.
+    #
+    # See: https://stackoverflow.com/a/27162721
+    --volume=/tmp/.X11-unix:/tmp/.X11-unix \
+    -e DISPLAY=unix$DISPLAY \
+    # Avoid error 'Failed to get D-Bus connection' when starting 'lightdm'.
+    #
+    # See: https://github.com/maci0/docker-systemd-unpriv/issues/7
+    --security-opt seccomp=unconfined \
     -itd $DOCKER_IMAGE_NAME

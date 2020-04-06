@@ -44,7 +44,8 @@ RUN /usr/bin/make install
 
 RUN ln -s /usr/local/bin/marble-qt /usr/local/bin/marble
 
-ENV DISPLAY=unix$DISPLAY
-VOLUME /tmp/.X11-unix:/tmp/.X11-unix
+RUN apt-get install -y xorg
+RUN apt-get install -y openbox
+RUN apt-get install -y lightdm
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
