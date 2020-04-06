@@ -40,4 +40,11 @@ RUN cmake \
 # NOTE: I have 12 CPU cores on my Xeon
 RUN /usr/bin/make -j12
 
+RUN /usr/bin/make install
+
+RUN ln -s /usr/local/bin/marble-qt /usr/local/bin/marble
+
+ENV DISPLAY=unix$DISPLAY
+VOLUME /tmp/.X11-unix:/tmp/.X11-unix
+
 ENTRYPOINT [ "/app/entrypoint.sh" ]
