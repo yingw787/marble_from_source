@@ -14,7 +14,12 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y qtcreator
 RUN apt-get install -y qt5-default
 RUN apt-get install -y git
+RUN apt-get install -y cmake
+RUN apt-get install -y make
+RUN apt-get install -y libqt5svg5-dev
+RUN apt-get install -y qtdeclarative5-dev
 
+RUN mkdir -p /root/marble/sources
 RUN git clone \
     -b Applications/19.04 \
     git://anongit.kde.org/marble \
@@ -33,6 +38,6 @@ RUN cmake \
     .
 
 # NOTE: I have 12 CPU cores on my Xeon
-# RUN /usr/bin/make -j12
+RUN /usr/bin/make -j12
 
 ENTRYPOINT [ "/app/entrypoint.sh" ]
