@@ -2,7 +2,7 @@
 
 # Build stage
 # Use Ubuntu vs. Alpine as KDE Marble is designed for Ubuntu
-FROM ubuntu:18.04
+FROM ubuntu:19.04
 LABEL application=marble
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -48,4 +48,5 @@ RUN apt-get install -y xorg
 RUN apt-get install -y openbox
 RUN apt-get install -y lightdm
 
-ENTRYPOINT [ "/app/entrypoint.sh" ]
+# Run commands.
+CMD [ "exec", "\"@\"" ]
