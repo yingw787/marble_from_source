@@ -8,6 +8,11 @@ export DOCKER_IMAGE_NAME ?= marble
 export USERID ?= $(shell id -u $(whoami))
 export GROUPID ?= $(shell id -g $(whoami))
 
+export AWS_PROFILE=ying.wang
+export AWS_OSM_PBF_BUCKETNAME=yingw787-kde-marble-osm-snapshots
+
+export OSM_FILENAME=north-america-latest.osm.md5sum-25db67c763ad8b856c9ff3d0f18ce14c.gen-2020-09-12T20:42:02Z.pbf
+
 version:
 	@echo '{"Version": "$(APP_VERSION)"}'
 
@@ -24,9 +29,43 @@ check:
 	@echo $$(docker --version)
 	# git version 2.27.0
 	@echo $$(git --version)
+	# aws-cli/1.18.131 Python/3.8.2 Linux/5.4.0-47-generic botocore/1.17.54
+	@echo $$(aws --version)
+
+# Synchronize data dump if necessary
+setup:
+	aws s3 cp $(OSM_FILENAME) s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) --profile $(AWS_PROFILE)
+	# aws s3 cp s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) $(OSM_FILENAME) --profile $(AWS_PROFILE)
 
 docker-build:
 	docker build \
 		--file ./Dockerfile \
 		--tag $(DOCKER_IMAGE_NAME):$(APP_VERSION) \
 		.
+
+# From: https://stackoverflow.com/a/14061796
+# If the first argument is "run"...
+ifeq (docker-run,$(firstword $(MAKECMDGOALS)))
+  # use the rest as arguments for "run"
+  RUN_ARGS := $(wordlist 2,$(words $(MAKECMDGOALS)),$(MAKECMDGOALS))
+  # ...and turn them into do-nothing targets
+  $(eval $(RUN_ARGS):;@:)
+endif
+
+export XSOCK=/tmp/.X11-unix
+
+# Lifts command into `docker run` context.
+docker-run: docker-build
+	docker run \
+		--rm \
+		-it \
+		-v $(shell pwd):/app \
+		-v $(HOME)/.Xauthority:/root/.Xauthority \
+		-v $(XSOCK):$(XSOCK) \
+		-e DISPLAY=unix$(DISPLAY) \
+		--net=host \
+		$(DOCKER_IMAGE_NAME):$(APP_VERSION) \
+		bash -c "$(RUN_ARGS)"
+
+docker-bash:
+	$(MAKE) docker-run bash
