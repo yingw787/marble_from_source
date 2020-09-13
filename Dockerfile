@@ -2,10 +2,13 @@
 
 # Build stage
 # Use Ubuntu vs. Alpine as KDE Marble is designed for Ubuntu
-FROM ubuntu:19.04
-LABEL application=marble
+FROM ubuntu:focal-20200729
+LABEL maintainer="Ying Wang"
+LABEL application="marble"
 
+# Set build arguments.
 ARG DEBIAN_FRONTEND=noninteractive
+ARG APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
 
 RUN apt-get -y update
 RUN apt-get -y upgrade
@@ -44,9 +47,9 @@ RUN /usr/bin/make install
 
 RUN ln -s /usr/local/bin/marble-qt /usr/local/bin/marble
 
-RUN apt-get install -y xorg
-RUN apt-get install -y openbox
-RUN apt-get install -y lightdm
+# RUN apt-get install -y xorg
+# RUN apt-get install -y openbox
+# RUN apt-get install -y lightdm
 
 # Run commands.
 CMD [ "exec", "\"@\"" ]
