@@ -32,10 +32,13 @@ check:
 	# aws-cli/1.18.131 Python/3.8.2 Linux/5.4.0-47-generic botocore/1.17.54
 	@echo $$(aws --version)
 
-# Synchronize data dump if necessary
+# Download data dump to local.
 setup:
+	aws s3 cp s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) $(OSM_FILENAME) --profile $(AWS_PROFILE)
+
+# Synchronize data dump to S3.
+update-s3:
 	aws s3 cp $(OSM_FILENAME) s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) --profile $(AWS_PROFILE)
-	# aws s3 cp s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) $(OSM_FILENAME) --profile $(AWS_PROFILE)
 
 docker-build:
 	docker build \
