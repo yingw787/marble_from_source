@@ -24,8 +24,8 @@ RUN apt-get install -y qtdeclarative5-dev
 
 RUN mkdir -p /root/marble/sources
 RUN git clone \
-    -b Applications/19.04 \
-    git://anongit.kde.org/marble \
+    -b v20.04.3 \
+    https://invent.kde.org/education/marble \
     /root/marble/sources
 
 # NOTE: Must be within source directory when compiling, otherwise will result in
