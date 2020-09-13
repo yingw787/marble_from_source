@@ -13,6 +13,9 @@ export AWS_OSM_PBF_BUCKETNAME=yingw787-kde-marble-osm-snapshots
 
 export OSM_FILENAME=north-america-latest.osm.md5sum-25db67c763ad8b856c9ff3d0f18ce14c.gen-2020-09-12T20:42:02Z.pbf
 
+export S3_ACCESS_KEY ?= $(shell aws configure get aws_access_key_id --profile $(AWS_PROFILE))
+export S3_SECRET_KEY ?= $(shell aws configure get aws_secret_access_key --profile $(AWS_PROFILE))
+
 version:
 	@echo '{"Version": "$(APP_VERSION)"}'
 
@@ -31,14 +34,16 @@ check:
 	@echo $$(git --version)
 	# aws-cli/1.18.131 Python/3.8.2 Linux/5.4.0-47-generic botocore/1.17.54
 	@echo $$(aws --version)
+	# s4cmd version 2.1.0
+	@echo $$(s4cmd --version)
 
 # Download data dump to local.
 setup:
-	aws s3 cp s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) $(OSM_FILENAME) --profile $(AWS_PROFILE)
+	S3_ACCESS_KEY=$(S3_ACCESS_KEY) S3_SECRET_KEY=$(S3_SECRET_KEY) s4cmd --num-threads=12 --debug --verbose get s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) $(OSM_FILENAME) --profile $(AWS_PROFILE)
 
 # Synchronize data dump to S3.
 update-s3:
-	aws s3 cp $(OSM_FILENAME) s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME) --profile $(AWS_PROFILE)
+	S3_ACCESS_KEY=$(S3_ACCESS_KEY) S3_SECRET_KEY=$(S3_SECRET_KEY) s4cmd --num-threads=12 --debug --verbose put $(OSM_FILENAME) s3://$(AWS_OSM_PBF_BUCKETNAME)/$(OSM_FILENAME)
 
 docker-build:
 	docker build \
