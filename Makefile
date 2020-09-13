@@ -24,3 +24,9 @@ check:
 	@echo $$(docker --version)
 	# git version 2.27.0
 	@echo $$(git --version)
+
+docker-build:
+	docker build \
+		--file ./Dockerfile \
+		--tag $(DOCKER_IMAGE_NAME):$(APP_VERSION) \
+		.
