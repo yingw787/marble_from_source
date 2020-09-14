@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  openstreetmap:
+    container_name: openstreetmap
+    image: overv/openstreetmap-tile-server
+    network_mode: host
+    deploy:
+      resources:
+        limits:
+          cpus: 4.00
+          memory: 16G
+        reservations:
+          cpus: 4.00
+          memory: 16G
